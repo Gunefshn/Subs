@@ -1,25 +1,17 @@
-import { Stack, Link } from 'expo-router';
+import { View, Text } from 'react-native';
+import React from 'react';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { View } from 'react-native';
-
-import { Button } from '@/components/Button';
-import { Container } from '@/components/Container';
-import { ScreenContent } from '@/components/ScreenContent';
-
-export default function Home() {
+const Index = () => {
   return (
-    <View className={styles.container}>
-      <Stack.Screen options={{ title: 'Home' }} />
-      <Container>
-        <ScreenContent path="app/index.tsx" title="Home"></ScreenContent>
-        <Link href={{ pathname: '/details', params: { name: 'Dan' } }} asChild>
-          <Button title="Show Details" />
-        </Link>
-      </Container>
-    </View>
+    <SafeAreaView className="p-4">
+      <View className="border bg-slate-200 p-4">
+        <Text className="self-center text-2xl font-semibold text-blue-500">
+          NativeWind Gerçekten Çalışıyor mu? (Test)
+        </Text>
+      </View>
+    </SafeAreaView>
   );
-}
-
-const styles = {
-  container: 'flex flex-1 bg-white',
 };
+
+export default Index;
