@@ -12,7 +12,7 @@ import { Ionicons, AntDesign } from '@expo/vector-icons';
 import { router } from 'expo-router';
 
 const handeLogin = () => {
-  // router.replace('/(tabs)/dashboard');
+  router.replace('/(tabs)/dashboard');
 };
 const AuthScreen = () => {
   const [isLogin, setIsLogin] = useState(true);
