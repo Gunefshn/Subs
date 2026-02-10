@@ -11,3 +11,4 @@ const AddTransactions = () => {
 };
 
 export default AddTransactions;
+{/*Gelir-gider ekleme ekranı ekran3 (figmada 4.) */}

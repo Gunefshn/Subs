@@ -1,8 +1,10 @@
-import { Tabs } from 'expo-router';
+import { Tabs, Stack } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { View, StyleSheet } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
+
+
 export default function Layout() {
   return (
     <Tabs
@@ -44,7 +46,7 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="subcriptions"
+        name="subscriptions"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <MaterialIcons name="subscriptions" size={24} color={color} />
@@ -58,8 +60,13 @@ export default function Layout() {
         }}
       />
     </Tabs>
+      
+
+
   );
 }
+
+
 
 const styles = StyleSheet.create({
   addButton: {
