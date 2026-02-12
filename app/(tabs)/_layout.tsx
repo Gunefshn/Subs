@@ -44,7 +44,7 @@ export default function Layout() {
         }}
       />
       <Tabs.Screen
-        name="subcriptions"
+        name="subscriptions"
         options={{
           tabBarIcon: ({ color, focused }) => (
             <MaterialIcons name="subscriptions" size={24} color={color} />
