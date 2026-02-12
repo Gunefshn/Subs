@@ -1,13 +1,13 @@
-import { AuthProvider } from '@/src/contexts/AuthContext';
+import '../global.css';
+
 import { Stack } from 'expo-router';
 
-export default function RootLayout() {
+export default function Layout() {
   return (
-    <AuthProvider>
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="index" />
-        <Stack.Screen name="(tabs)" />
-      </Stack>
-    </AuthProvider>
+    // TODO: AuthProvider ile çevrelenerek güncellemeler yapılacak.
+    <Stack>
+      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    </Stack>
   );
 }
