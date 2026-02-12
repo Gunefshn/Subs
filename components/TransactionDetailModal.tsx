@@ -1,5 +1,6 @@
 import React from 'react';
 import { Modal, View, Text, TouchableOpacity, Alert, ScrollView } from 'react-native';
+import { useRouter } from 'expo-router';
 
 export interface Transaction {
   id: string;
@@ -20,6 +21,8 @@ interface Props {
 }
 
 export default function TransactionDetailModal({ visible, onClose, transaction, onDelete }: Props) {
+  const router = useRouter();
+
   if (!transaction) return null;
 
   const handleDelete = () => {
@@ -34,6 +37,21 @@ export default function TransactionDetailModal({ visible, onClose, transaction, 
         },
       },
     ]);
+  };
+
+  const handleEdit = () => {
+    onClose();
+    router.push({
+      pathname: '/(tabs)/addTransactions',
+      params: {
+        mode: 'edit',
+        id: transaction.id,
+        amount: transaction.amount.toString(),
+        category: transaction.category,
+        date: transaction.date,
+        note: transaction.note || '',
+      },
+    });
   };
 
   const formattedDate = new Date(transaction.date).toLocaleDateString('tr-TR', {
@@ -90,7 +108,7 @@ export default function TransactionDetailModal({ visible, onClose, transaction, 
             <View className="mt-4 w-full flex-row gap-4">
               <TouchableOpacity
                 className="flex-1 items-center rounded-2xl bg-blue-50 py-4"
-                onPress={() => Alert.alert('Bilgi', 'Düzenleme yakında eklenecek.')}>
+                onPress={handleEdit}>
                 <Text className="text-lg font-bold text-blue-600">Düzenle</Text>
               </TouchableOpacity>
 
