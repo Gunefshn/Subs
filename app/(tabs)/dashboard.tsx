@@ -1,193 +1,130 @@
-import { View, ScrollView, Text, TouchableOpacity } from 'react-native';
-import React ,{useState} from 'react'; //Dinamik alanlar için useState
+import { View, ScrollView, Text, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AntDesign, Entypo, Feather, FontAwesome5, Fontisto, Foundation, Ionicons, MaterialIcons } from '@expo/vector-icons'; //İkon kullanımı için
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { NavigationContainer } from "@react-navigation/native";
-import TransactionCard from "../components/TransactionCard"; 
-import { Link } from "expo-router";
+import { Feather, Fontisto } from '@expo/vector-icons';
+import { Link } from 'expo-router';
+import TransactionCard from '../components/TransactionCard';
+import { useUser } from '../../src/hooks/useUser';
+import { useTransactions } from '../../src/hooks/useTransactions';
 
+// Kategori → ikon eşleştirmesi
+const categoryIconMap: Record<string, { icon: string; color: string }> = {
+  Market: { icon: 'shopping-cart', color: 'green' },
+  Yemek: { icon: 'shop', color: 'orange' },
+  Ulaşım: { icon: 'car', color: 'blue' },
+  Fatura: { icon: 'drop', color: 'blue' },
+  Spor: { icon: 'dribbble', color: 'orange' },
+  Eğlence: { icon: 'tv', color: 'red' },
+  'Dijital Servis': { icon: 'tv', color: 'red' },
+  Gelir: { icon: 'attach-money', color: 'green' },
+  Diğer: { icon: 'dots-three-horizontal', color: 'gray' },
+};
 
+export default function Dashboard() {
+  const { profile, loading: profileLoading } = useUser();
+  const { transactions, summary, loading: txLoading } = useTransactions();
 
-const Index = () => {
-   
-  //Kullanıcı adı dinamik 
-  const [kullaniciAdi, setKullaniciAdi] = useState("ZEYNEP ECE");
+  const isLoading = profileLoading || txLoading;
 
-  {/*Alt satırdaki dinamik bakiye alanı*/}
-  const BalanceCard = () => {
-  const [bakiye, setBakiye] = useState(1539.25); //tasarımdaki değer
-  
+  // Para formatı
+  const formatCurrency = (amount: number) =>
+    `₺${amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
 
-  return (
-    <View>
-      <Text className="text-3xl font-semibold mt-6 px-4 text-black">
-        ₺{bakiye}
-      </Text>
-    </View>
+  if (isLoading) {
+    return (
+      <SafeAreaView className="flex-1 items-center justify-center bg-gray-900">
+        <ActivityIndicator size="large" color="#ffffff" />
+      </SafeAreaView>
     );
-  };
-
-  const [gelir, setGelir] = useState(10170.00);
-  const [gider, setGider] = useState(8630.75);
-
-
-  const IncomeExpense = ({gelir ,gider}) => {
-  return (
-    <View className="flex-row justify-between mt-8">
-      <View>
-        <Text className="text-gray-500 font-semibold px-4">
-          <Feather name="arrow-up-right" size={30} color="#16a34a" />
-          Gelir{": "}
-          <Text className="text-black font-bold">
-            ₺{gelir}
-          </Text>
-        </Text>
-    </View>
-
-      <View>
-        <Text className="text-gray-500 font-semibold px-4">
-          <Feather name="arrow-down-right" size={30} color="#dc2626" />
-          Gider{": "}
-          <Text className="text-black font-bold">
-            ₺{gider}
-          </Text>
-        </Text>
-      </View>
-    </View>
-  );
-};
-
-
-   {/*Harcama değişimi kutusu dinamik oluşturuldu.*/}
-   const InfoBox = ({ percent, isIncrease }) => {
-   return (
-    <View className="bg-white rounded-2xl p-4 mt-6 w-5/6 self-center">
-      <View className="flex-row items-center px-4 mt-1 ">
-        <Fontisto
-          name="info"
-          size={20}
-          color={isIncrease ? "green" : "red"}
-          style={{ marginRight: 6 }}
-        />
-        <Text className="text-lg font-semibold text-gray-500">
-          Harcamaların geçen aya göre %{percent} {isIncrease ? "arttı" : "azaldı"}.
-        </Text>
-      </View>
-    </View>
-  );  
-};
-
-const transactions = [
-  { name: "Macrocenter", icon: "shopping-cart", color: "green", amount: "₺783.50", date: "28.01.2026", category: "Market" },
-  { name: "HBO Max", icon: "tv", color: "red", amount: "₺229.90", date: "24.01.2026", category: "Dijital Servis" },
-  { name: "Pure Gym", icon: "dribbble", color: "orange", amount: "₺1150.00", date: "23.01.2026", category: "Spor" },
-  { name: "İSKİ", icon: "drop", color: "blue", amount: "₺345.25", date: "19.01.2026", category: "Fatura" },
-  { name: "Gail’s Bakery", icon: "shop", color: "orange", amount: "£240.00", date: "17.01.2026", category: "Yemek" },
-];
-
+  }
 
   return (
-      
-      
-      <SafeAreaView >
-        
-        {/*Text statik */}
-        <Text className="self-center mt-10 text-2xl font-semibold text-black">
-          Merhaba {kullaniciAdi}
+    <SafeAreaView className="flex-1 bg-gray-900">
+      <ScrollView showsVerticalScrollIndicator={false}>
+        {/* Kullanıcı adı */}
+        <Text className="mt-10 self-center text-2xl font-semibold text-white">
+          Merhaba <Text className="italic">{profile?.full_name?.split(' ')[0] ?? 'Kullanıcı'}</Text>
         </Text>
 
-        {/*En üstteki ana kutu ve içeriği*/}
-        <View className="bg-white rounded-2xl p-4 mt-6 w-5/6 h-60 self-center ">
-          <View className="flex-row justify-between items-center">
-          
-          {/*Sol tarafta text olarak başlık */}
-          <Text className="text-lg font-semibold mt-3 px-4 text-gray-500">
-           Toplam Bakiye
-          </Text>
-
-          {/*Sağ tarafta buton */}
-          <TouchableOpacity className="bg-gray-100 mt-3 px-5 py-1 rounded-xl">
-            <Text className="text-sm font-semibold text-gray-600">
-            TRY
-            </Text>
-          </TouchableOpacity>
-
+        {/* Bakiye Kartı */}
+        <View className="mt-6 w-5/6 self-center rounded-2xl bg-gray-800 p-4">
+          <View className="flex-row items-center justify-between">
+            <Text className="mt-3 px-4 text-lg font-semibold text-gray-400">Toplam Bakiye</Text>
+            <TouchableOpacity className="mt-3 rounded-xl bg-gray-700 px-5 py-1">
+              <Text className="text-sm font-semibold text-gray-300">
+                {profile?.currency_preference ?? 'TRY'}
+              </Text>
+            </TouchableOpacity>
           </View>
 
-          {/*Dinamik bakiye alanı*/}
-          <BalanceCard/>
+          <Text className="mt-6 px-4 text-3xl font-semibold text-white">
+            {formatCurrency(summary.balance)}
+          </Text>
 
-          {/*Dinamik gelir-gider alanları*/}
-          <IncomeExpense gelir={gelir} gider={gider} />
+          {/* Gelir / Gider */}
+          <View className="mb-2 mt-8 flex-row justify-between">
+            <View className="flex-row items-center px-4">
+              <Feather name="arrow-up-right" size={20} color="#16a34a" />
+              <Text className="ml-1 font-semibold text-gray-400">
+                Gelir:{' '}
+                <Text className="font-bold text-white">{formatCurrency(summary.totalIncome)}</Text>
+              </Text>
+            </View>
+            <View className="flex-row items-center px-4">
+              <Feather name="arrow-down-right" size={20} color="#dc2626" />
+              <Text className="ml-1 font-semibold text-gray-400">
+                Gider:{' '}
+                <Text className="font-bold text-white">{formatCurrency(summary.totalExpense)}</Text>
+              </Text>
+            </View>
+          </View>
         </View>
 
+        {/* Info Box */}
+        <View className="mt-4 w-5/6 self-center rounded-2xl bg-gray-800 p-4">
+          <View className="flex-row items-center px-2">
+            <Fontisto name="info" size={16} color="#6b7280" style={{ marginRight: 8 }} />
+            <Text className="text-sm text-gray-400">
+              {transactions.length === 0
+                ? 'Henüz işlem bulunmuyor.'
+                : `Son ${transactions.length} işleminiz listeleniyor.`}
+            </Text>
+          </View>
+        </View>
 
+        {/* Son İşlemler */}
+        <View className="mt-6 flex-row items-center justify-between px-12">
+          <Text className="text-lg font-semibold text-white">Son İşlemler</Text>
+          <Link href="/screens/allTransactions" asChild>
+            <TouchableOpacity>
+              <Text className="text-lg font-semibold text-gray-500">Tümünü Gör</Text>
+            </TouchableOpacity>
+          </Link>
+        </View>
 
-        {/*Dinamik infobox kutusu, artış-azalış gösteriyor.*/}   
-        <InfoBox percent={2} isIncrease={true} />
-           
-
-      {/*Son İşlemler*/}
-      <View className="flex-row justify-between items-center px-12 mt-6">
-      <Text className="text-lg font-semibold text-black">Son İşlemler</Text>
-        <Link href="/screens/allTransactions" asChild>
-         <TouchableOpacity>
-          <Text className="text-lg font-semibold text-gray-500">Tümünü Gör</Text>
-         </TouchableOpacity>
-        </Link>
-      </View>
-
-      {/*Kartların listesi*/}
-      <ScrollView className="mt-4"> 
-        {/*Tüm işlemlerden 5 elemanı alıyor.*/}
-        {transactions.slice(0, 5).map((item, index) => (
-          <TransactionCard
-            key={index}
-            name={item.name}
-            icon={item.icon}
-            color={item.color}
-            amount={item.amount}
-            date={item.date}
-            category={item.category}          />
-        ))}
+        <ScrollView className="mb-6 mt-4">
+          {transactions.length === 0 ? (
+            <Text className="mt-8 text-center text-gray-500">Henüz işlem eklenmedi.</Text>
+          ) : (
+            transactions.map((item) => {
+              const iconData = categoryIconMap[item.category] ?? {
+                icon: 'dots-three-horizontal',
+                color: 'gray',
+              };
+              return (
+                <TransactionCard
+                  key={item.id}
+                  name={item.note || item.category}
+                  icon={iconData.icon}
+                  color={iconData.color}
+                  amount={formatCurrency(item.amount)}
+                  date={new Date(item.date).toLocaleDateString('tr-TR')}
+                  category={item.category}
+                />
+              );
+            })
+          )}
+        </ScrollView>
       </ScrollView>
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-      
-      
-      
-      
-      
-      
-      
-      
-      </SafeAreaView>
-
-      
-    
-  );  
-};
-
-
-
-
-export default Index;
-
-
-
-
+    </SafeAreaView>
+  );
+}

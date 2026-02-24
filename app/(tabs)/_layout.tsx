@@ -4,7 +4,6 @@ import { View, StyleSheet } from 'react-native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 import FontAwesome6 from '@expo/vector-icons/FontAwesome6';
 
-
 export default function Layout() {
   return (
     <Tabs
@@ -60,13 +59,8 @@ export default function Layout() {
         }}
       />
     </Tabs>
-      
-
-
   );
 }
-
-
 
 const styles = StyleSheet.create({
   addButton: {
