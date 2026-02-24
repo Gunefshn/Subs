@@ -1,37 +1,61 @@
-import React from "react";
-import { View, Text } from "react-native";
-import { Entypo, FontAwesome5, MaterialIcons } from "@expo/vector-icons";
+import React from 'react';
+import { View, Text } from 'react-native';
+import { Entypo } from '@expo/vector-icons';
 
 type Props = {
   name: string;
   icon: string;
   color: string;
-  amount: number;
+  amount: string;
   date: string;
   category: string;
 };
 
+// Renk adını hex'e çevir
+const colorMap: Record<string, string> = {
+  green: '#16a34a',
+  red: '#dc2626',
+  blue: '#3b82f6',
+  orange: '#f97316',
+  purple: '#a855f7',
+  gray: '#6b7280',
+};
+
+// Arka plan rengi (soluk ton)
+const bgColorMap: Record<string, string> = {
+  green: '#14532d33',
+  red: '#7f1d1d33',
+  blue: '#1e3a5f33',
+  orange: '#7c2d1233',
+  purple: '#3b0764 33',
+  gray: '#37415133',
+};
+
 export default function TransactionCard({ name, icon, color, amount, date, category }: Props) {
+  const iconColor = colorMap[color] ?? '#6b7280';
+  const iconBg = bgColorMap[color] ?? '#37415133';
+
   return (
-    <View className="bg-white rounded-2xl p-4 mt-4 w-5/6 h-20 self-center">
-      <View className="flex-row justify-between items-center">
-
-        {/* Sol taraf: ikon + isim + category */}
-        <View className="flex-row items-center">
-          <Entypo name={icon as any} size={25} color={color} />
-          <View className="ml-2 flex-col">
-            <Text className="text-xl font-semibold text-black">{name}</Text>
-            <Text className="text-lg text-gray-500">{category}</Text>
+    <View className="mx-1 mt-3 rounded-2xl bg-gray-800 p-4" style={{ minHeight: 72 }}>
+      <View className="flex-row items-center justify-between">
+        {/* Sol: ikon + isim + kategori */}
+        <View className="flex-1 flex-row items-center">
+          <View
+            className="mr-3 items-center justify-center rounded-full"
+            style={{ width: 44, height: 44, backgroundColor: iconBg }}>
+            <Entypo name={icon as any} size={22} color={iconColor} />
           </View>
-
+          <View className="flex-col">
+            <Text className="text-base font-semibold text-white">{name}</Text>
+            <Text className="text-sm text-gray-400">{category}</Text>
+          </View>
         </View>
 
-        {/* Sağ taraf: ücret + tarih */}
+        {/* Sağ: tutar + tarih */}
         <View className="items-end">
-          <Text className="text-xl font-bold text-black">{amount}</Text>
-          <Text className="text-lg text-gray-500">{date}</Text>
+          <Text className="text-base font-bold text-white">{amount}</Text>
+          <Text className="text-sm text-gray-400">{date}</Text>
         </View>
-
       </View>
     </View>
   );
