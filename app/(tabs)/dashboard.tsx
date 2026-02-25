@@ -5,6 +5,8 @@ import { Link } from 'expo-router';
 import TransactionCard from '../components/TransactionCard';
 import { useUser } from '../../src/hooks/useUser';
 import { useTransactions } from '../../src/hooks/useTransactions';
+import { convertCurrency, formatAmount } from '../../src/lib/exchange';
+import { useAppContext } from '../../src/contexts/AppContext';
 
 // Kategori → ikon eşleştirmesi
 const categoryIconMap: Record<string, { icon: string; color: string }> = {
@@ -22,12 +24,14 @@ const categoryIconMap: Record<string, { icon: string; color: string }> = {
 export default function Dashboard() {
   const { profile, loading: profileLoading } = useUser();
   const { transactions, summary, loading: txLoading } = useTransactions();
-
+  const { currency, rates } = useAppContext();
   const isLoading = profileLoading || txLoading;
 
   // Para formatı
-  const formatCurrency = (amount: number) =>
-    `₺${amount.toLocaleString('tr-TR', { minimumFractionDigits: 2 })}`;
+  const formatCurrency = (amountInTRY: number) => {
+    const converted = convertCurrency(amountInTRY, currency, rates);
+    return formatAmount(converted, currency);
+  };
 
   if (isLoading) {
     return (
@@ -49,11 +53,9 @@ export default function Dashboard() {
         <View className="mt-6 w-5/6 self-center rounded-2xl bg-gray-800 p-4">
           <View className="flex-row items-center justify-between">
             <Text className="mt-3 px-4 text-lg font-semibold text-gray-400">Toplam Bakiye</Text>
-            <TouchableOpacity className="mt-3 rounded-xl bg-gray-700 px-5 py-1">
-              <Text className="text-sm font-semibold text-gray-300">
-                {profile?.currency_preference ?? 'TRY'}
-              </Text>
-            </TouchableOpacity>
+            <View className="mt-3 rounded-xl bg-gray-700 px-5 py-1">
+              <Text className="text-sm font-semibold text-gray-300">{currency}</Text>
+            </View>
           </View>
 
           <Text className="mt-6 px-4 text-3xl font-semibold text-white">

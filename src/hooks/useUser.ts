@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { supabase } from '../lib/supabase';
 import { useAuth } from '../contexts/AuthContext';
 
@@ -13,20 +13,23 @@ export function useUser() {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
+  const fetchProfile = useCallback(async () => {
     if (!user) return;
-
-    supabase
+    setLoading(true);
+    const { data, error } = await supabase
       .from('profiles')
       .select('full_name, email, currency_preference')
       .eq('id', user.id)
-      .single()
-      .then(({ data, error }) => {
-        if (error) console.error('Profil çekme hatası:', error);
-        else setProfile(data);
-        setLoading(false);
-      });
+      .single();
+
+    if (error) console.error('Profil çekme hatası:', error);
+    else setProfile(data);
+    setLoading(false);
   }, [user]);
 
-  return { profile, loading };
+  useEffect(() => {
+    fetchProfile();
+  }, [fetchProfile]);
+
+  return { profile, loading, refetch: fetchProfile };
 }
