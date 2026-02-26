@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text } from 'react-native';
 import { Entypo } from '@expo/vector-icons';
+import { useTheme } from '@/src/hooks/useTheme';
 
 type Props = {
   name: string;
@@ -11,7 +12,6 @@ type Props = {
   category: string;
 };
 
-// Renk adını hex'e çevir
 const colorMap: Record<string, string> = {
   green: '#16a34a',
   red: '#dc2626',
@@ -21,22 +21,35 @@ const colorMap: Record<string, string> = {
   gray: '#6b7280',
 };
 
-// Arka plan rengi (soluk ton)
-const bgColorMap: Record<string, string> = {
+const bgColorMapDark: Record<string, string> = {
   green: '#14532d33',
   red: '#7f1d1d33',
   blue: '#1e3a5f33',
   orange: '#7c2d1233',
-  purple: '#3b0764 33',
+  purple: '#3b076433',
   gray: '#37415133',
 };
 
+const bgColorMapLight: Record<string, string> = {
+  green: '#dcfce7',
+  red: '#fee2e2',
+  blue: '#dbeafe',
+  orange: '#ffedd5',
+  purple: '#f3e8ff',
+  gray: '#f3f4f6',
+};
+
 export default function TransactionCard({ name, icon, color, amount, date, category }: Props) {
+  const { isDark } = useTheme();
   const iconColor = colorMap[color] ?? '#6b7280';
-  const iconBg = bgColorMap[color] ?? '#37415133';
+  const iconBg = isDark
+    ? (bgColorMapDark[color] ?? '#37415133')
+    : (bgColorMapLight[color] ?? '#f3f4f6');
 
   return (
-    <View className="mx-1 mt-3 rounded-2xl bg-gray-800 p-4" style={{ minHeight: 72 }}>
+    <View
+      className={`mx-4 mb-3 rounded-2xl p-4 ${isDark ? 'bg-gray-800' : 'bg-white'}`}
+      style={{ shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 6, elevation: 2 }}>
       <View className="flex-row items-center justify-between">
         {/* Sol: ikon + isim + kategori */}
         <View className="flex-1 flex-row items-center">
@@ -45,16 +58,22 @@ export default function TransactionCard({ name, icon, color, amount, date, categ
             style={{ width: 44, height: 44, backgroundColor: iconBg }}>
             <Entypo name={icon as any} size={22} color={iconColor} />
           </View>
-          <View className="flex-col">
-            <Text className="text-base font-semibold text-white">{name}</Text>
-            <Text className="text-sm text-gray-400">{category}</Text>
+          <View>
+            <Text className={`text-base font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+              {name}
+            </Text>
+            <Text className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+              {category}
+            </Text>
           </View>
         </View>
 
         {/* Sağ: tutar + tarih */}
         <View className="items-end">
-          <Text className="text-base font-bold text-white">{amount}</Text>
-          <Text className="text-sm text-gray-400">{date}</Text>
+          <Text className={`text-base font-bold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+            {amount}
+          </Text>
+          <Text className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{date}</Text>
         </View>
       </View>
     </View>

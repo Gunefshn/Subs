@@ -2,7 +2,19 @@ import '../global.css';
 import { useEffect } from 'react';
 import { Stack, useRouter, useSegments } from 'expo-router';
 import { AuthProvider, useAuth } from '../src/contexts/AuthContext';
-import { AppProvider } from '@/src/contexts/AppContext';
+import { AppProvider, useAppContext } from '../src/contexts/AppContext';
+import { useColorScheme } from 'nativewind';
+
+function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const { isDarkMode } = useAppContext();
+  const { setColorScheme } = useColorScheme();
+
+  useEffect(() => {
+    setColorScheme(isDarkMode ? 'dark' : 'light');
+  }, [isDarkMode]);
+
+  return <>{children}</>;
+}
 
 function RootLayoutNav() {
   const { session, loading } = useAuth();
@@ -33,7 +45,9 @@ export default function RootLayout() {
   return (
     <AppProvider>
       <AuthProvider>
-        <RootLayoutNav />
+        <ThemeProvider>
+          <RootLayoutNav />
+        </ThemeProvider>
       </AuthProvider>
     </AppProvider>
   );
