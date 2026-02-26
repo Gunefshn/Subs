@@ -11,6 +11,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -332,7 +333,9 @@ export default function ProfileScreen() {
           <TouchableOpacity
             className="flex-row items-center justify-between px-4 py-4"
             style={{ borderBottomWidth: 1, borderBottomColor: borderColorRaw }}
-            onPress={() => Alert.alert('Yakında', 'Gizlilik sözleşmesi linki eklenecek.')}>
+            onPress={() => {
+              Linking.openURL('https://gunefshn.github.io/SubsPrivacy/');
+            }}>
             <View className="flex-row items-center">
               <View
                 className="mr-3 h-8 w-8 items-center justify-center rounded-full"
@@ -346,7 +349,9 @@ export default function ProfileScreen() {
 
           <TouchableOpacity
             className="flex-row items-center justify-between px-4 py-4"
-            onPress={() => Alert.alert('Yakında', 'SSS linki eklenecek.')}>
+            onPress={() => {
+              Linking.openURL('https://gunefshn.github.io/SubsFaq/');
+            }}>
             <View className="flex-row items-center">
               <View
                 className="mr-3 h-8 w-8 items-center justify-center rounded-full"
