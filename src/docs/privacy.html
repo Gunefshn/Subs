@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Gizlilik Sözleşmesi – Subs</title>
+    <style>
+      *,
+      *::before,
+      *::after {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      :root {
+        --bg: #0f172a;
+        --surface: #1e293b;
+        --border: #334155;
+        --accent: #6366f1;
+        --accent-soft: #6366f120;
+        --text: #f1f5f9;
+        --muted: #94a3b8;
+        --danger: #ef4444;
+        --success: #10b981;
+      }
+
+      body {
+        background: var(--bg);
+        color: var(--text);
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+        line-height: 1.7;
+        min-height: 100vh;
+      }
+
+      /* NAV */
+      nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(15, 23, 42, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        padding: 0 24px;
+        height: 64px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .nav-brand {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+      }
+      .nav-logo {
+        width: 36px;
+        height: 36px;
+        background: var(--accent);
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+      }
+      .nav-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: var(--text);
+      }
+      .nav-links {
+        display: flex;
+        gap: 8px;
+      }
+      .nav-links a {
+        color: var(--muted);
+        text-decoration: none;
+        font-size: 14px;
+        padding: 6px 14px;
+        border-radius: 8px;
+        transition: all 0.2s;
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        background: var(--surface);
+        color: var(--text);
+      }
+      .nav-links a.active {
+        color: var(--accent);
+      }
+
+      /* HERO */
+      .hero {
+        text-align: center;
+        padding: 72px 24px 48px;
+        max-width: 720px;
+        margin: 0 auto;
+      }
+      .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--accent-soft);
+        color: var(--accent);
+        border: 1px solid var(--accent);
+        border-radius: 100px;
+        padding: 4px 14px;
+        font-size: 13px;
+        font-weight: 600;
+        margin-bottom: 20px;
+      }
+      .hero h1 {
+        font-size: clamp(28px, 5vw, 42px);
+        font-weight: 800;
+        margin-bottom: 12px;
+      }
+      .hero p {
+        color: var(--muted);
+        font-size: 16px;
+      }
+      .hero .date {
+        margin-top: 16px;
+        font-size: 13px;
+        color: var(--muted);
+        background: var(--surface);
+        display: inline-block;
+        padding: 4px 14px;
+        border-radius: 100px;
+        border: 1px solid var(--border);
+      }
+
+      /* LAYOUT */
+      .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 24px 80px;
+      }
+
+      /* SECTION */
+      .section {
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 20px;
+        padding: 32px;
+        margin-bottom: 20px;
+        transition: border-color 0.2s;
+      }
+      .section:hover {
+        border-color: var(--accent);
+      }
+
+      .section-header {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        margin-bottom: 20px;
+      }
+      .section-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 22px;
+        flex-shrink: 0;
+      }
+      .section h2 {
+        font-size: 18px;
+        font-weight: 700;
+      }
+      .section p {
+        color: var(--muted);
+        margin-bottom: 12px;
+      }
+      .section p:last-child {
+        margin-bottom: 0;
+      }
+
+      /* DATA TABLE */
+      .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 16px;
+        font-size: 14px;
+      }
+      .data-table th {
+        text-align: left;
+        padding: 10px 14px;
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        border-bottom: 1px solid var(--border);
+      }
+      .data-table td {
+        padding: 12px 14px;
+        border-bottom: 1px solid var(--border);
+        color: var(--text);
+        vertical-align: top;
+      }
+      .data-table tr:last-child td {
+        border-bottom: none;
+      }
+      .data-table tr:hover td {
+        background: rgba(99, 102, 241, 0.05);
+      }
+
+      .badge {
+        display: inline-block;
+        padding: 2px 10px;
+        border-radius: 100px;
+        font-size: 12px;
+        font-weight: 600;
+      }
+      .badge-yes {
+        background: rgba(16, 185, 129, 0.15);
+        color: #10b981;
+      }
+      .badge-no {
+        background: rgba(239, 68, 68, 0.15);
+        color: #ef4444;
+      }
+      .badge-partial {
+        background: rgba(245, 158, 11, 0.15);
+        color: #f59e0b;
+      }
+
+      /* LIST */
+      .styled-list {
+        list-style: none;
+        padding: 0;
+        margin-top: 12px;
+      }
+      .styled-list li {
+        display: flex;
+        gap: 10px;
+        padding: 8px 0;
+        color: var(--muted);
+        border-bottom: 1px solid var(--border);
+        font-size: 15px;
+      }
+      .styled-list li:last-child {
+        border-bottom: none;
+      }
+      .styled-list li::before {
+        content: '→';
+        color: var(--accent);
+        flex-shrink: 0;
+      }
+
+      /* RIGHTS GRID */
+      .rights-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 12px;
+        margin-top: 16px;
+      }
+      .right-card {
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 12px;
+        padding: 16px;
+      }
+      .right-card .icon {
+        font-size: 24px;
+        margin-bottom: 8px;
+      }
+      .right-card h4 {
+        font-size: 14px;
+        font-weight: 700;
+        margin-bottom: 4px;
+      }
+      .right-card p {
+        font-size: 13px;
+        color: var(--muted);
+        margin: 0;
+      }
+
+      /* CONTACT */
+      .contact-box {
+        background: var(--accent-soft);
+        border: 1px solid var(--accent);
+        border-radius: 16px;
+        padding: 24px;
+        text-align: center;
+        margin-top: 20px;
+      }
+      .contact-box h3 {
+        font-size: 18px;
+        margin-bottom: 8px;
+      }
+      .contact-box p {
+        color: var(--muted);
+        margin-bottom: 16px;
+        font-size: 14px;
+      }
+      .contact-btn {
+        display: inline-block;
+        background: var(--accent);
+        color: #fff;
+        padding: 10px 28px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 700;
+        font-size: 15px;
+        transition: opacity 0.2s;
+      }
+      .contact-btn:hover {
+        opacity: 0.85;
+      }
+
+      /* FOOTER */
+      footer {
+        border-top: 1px solid var(--border);
+        padding: 24px;
+        text-align: center;
+        color: var(--muted);
+        font-size: 13px;
+      }
+      footer a {
+        color: var(--accent);
+        text-decoration: none;
+      }
+
+      @media (max-width: 600px) {
+        .nav-links a span {
+          display: none;
+        }
+        .section {
+          padding: 20px;
+        }
+        .rights-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- NAV -->
+    <nav>
+      <a class="nav-brand" href="#">
+        <div class="nav-logo">💰</div>
+        <span class="nav-title">Subs</span>
+      </a>
+      <div class="nav-links">
+        <a href="privacy.html" class="active">🔒 <span>Gizlilik</span></a>
+        <a href="faq.html">❓ <span>SSS</span></a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="hero-badge">🔒 Gizlilik Önceliğimiz</div>
+      <h1>Gizlilik Sözleşmesi</h1>
+      <p>
+        Subs uygulamasını kullanırken verilerinizin nasıl toplandığını, kullanıldığını ve
+        korunduğunu açıklıyoruz.
+      </p>
+      <div class="date">Son güncelleme: 26 Şubat 2026</div>
+    </div>
+
+    <div class="container">
+      <!-- 1. Giriş -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background: #6366f120">📋</div>
+          <h2>1. Giriş</h2>
+        </div>
+        <p>
+          Bu Gizlilik Politikası, <strong>Subs</strong> mobil uygulamasını ("Uygulama") kullanırken
+          kişisel verilerinizin nasıl toplandığını, işlendiğini ve korunduğunu açıklamaktadır.
+        </p>
+        <p>
+          Uygulamayı kullanarak bu politikayı kabul etmiş sayılırsınız. Politikayı kabul
+          etmiyorsanız lütfen uygulamayı kullanmayınız.
+        </p>
+        <p>
+          Subs; gelir/gider takibi, abonelik yönetimi ve kredi kartı takibi için tasarlanmış kişisel
+          finans uygulamasıdır. Tüm finansal verileri yalnızca sizin için saklıyoruz — üçüncü
+          taraflarla paylaşmıyoruz.
+        </p>
+      </div>
+
+      <!-- 2. Toplanan Veriler -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background: #f59e0b20">📊</div>
+          <h2>2. Toplanan Veriler</h2>
+        </div>
+        <p>Uygulama aşağıdaki verileri toplamaktadır:</p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Veri Türü</th>
+              <th>Açıklama</th>
+              <th>Üçüncü Tarafla Paylaşım</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>E-posta adresi</strong></td>
+              <td>Hesap oluşturma ve giriş için kullanılır</td>
+              <td><span class="badge badge-no">Hayır</span></td>
+            </tr>
+            <tr>
+              <td><strong>Ad soyad</strong></td>
+              <td>Profil sayfasında kişiselleştirme için kullanılır</td>
+              <td><span class="badge badge-no">Hayır</span></td>
+            </tr>
+            <tr>
+              <td><strong>Finansal işlemler</strong></td>
+              <td>Gelir ve gider kayıtları, kategori ve notlar</td>
+              <td><span class="badge badge-no">Hayır</span></td>
+            </tr>
+            <tr>
+              <td><strong>Kart bilgileri</strong></td>
+              <td>Yalnızca son 4 hane saklanır, tam numara hiçbir zaman saklanmaz</td>
+              <td><span class="badge badge-no">Hayır</span></td>
+            </tr>
+            <tr>
+              <td><strong>Abonelik bilgileri</strong></td>
+              <td>Abonelik adı, ücreti ve yenileme tarihi</td>
+              <td><span class="badge badge-no">Hayır</span></td>
+            </tr>
+            <tr>
+              <td><strong>Döviz tercihleri</strong></td>
+              <td>Para birimi seçimi, cihazda yerel olarak saklanır</td>
+              <td><span class="badge badge-no">Hayır</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- 3. Verilerin Kullanımı -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background: #10b98120">🎯</div>
+          <h2>3. Verilerin Kullanım Amaçları</h2>
+        </div>
+        <p>Topladığımız veriler yalnızca şu amaçlarla kullanılmaktadır:</p>
+        <ul class="styled-list">
+          <li>Hesabınızı oluşturmak ve kimliğinizi doğrulamak</li>
+          <li>Finansal işlem, abonelik ve kart verilerinizi güvenle saklamak</li>
+          <li>Aylık harcama karşılaştırması ve özet hesaplamaları sunmak</li>
+          <li>Döviz kuru dönüşümü gerçekleştirmek</li>
+          <li>Uygulama deneyimini kişiselleştirmek (karanlık mod, dil tercihi vb.)</li>
+          <li>Teknik sorunları tespit etmek ve çözmek</li>
+        </ul>
+        <p style="margin-top: 16px">
+          <strong>Verilerinizi asla:</strong> reklam, pazarlama, üçüncü taraf satışı veya profil
+          oluşturma amacıyla kullanmıyoruz.
+        </p>
+      </div>
+
+      <!-- 4. Veri Güvenliği -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background: #6366f120">🛡️</div>
+          <h2>4. Veri Güvenliği</h2>
+        </div>
+        <p>Verilerinizin güvenliği için aşağıdaki önlemleri alıyoruz:</p>
+        <ul class="styled-list">
+          <li>
+            Tüm veriler <strong>Supabase</strong> altyapısında şifreli olarak saklanmaktadır
+            (AES-256)
+          </li>
+          <li>
+            Sunucu ile uygulama arasındaki tüm iletişim <strong>HTTPS/TLS</strong> ile
+            şifrelenmektedir
+          </li>
+          <li>
+            Row Level Security (RLS) ile her kullanıcı yalnızca kendi verilerine erişebilmektedir
+          </li>
+          <li>
+            Kredi kartı numaraları hiçbir zaman tam olarak saklanmaz; yalnızca son 4 hane
+            görüntülenir
+          </li>
+          <li>
+            Şifreler hiçbir zaman düz metin olarak saklanmaz; Supabase Auth ile yönetilmektedir
+          </li>
+        </ul>
+      </div>
+
+      <!-- 5. Üçüncü Taraf Hizmetler -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background: #ef444420">🔗</div>
+          <h2>5. Üçüncü Taraf Hizmetler</h2>
+        </div>
+        <p>Uygulama yalnızca şu üçüncü taraf hizmetleri kullanmaktadır:</p>
+        <table class="data-table">
+          <thead>
+            <tr>
+              <th>Hizmet</th>
+              <th>Amaç</th>
+              <th>Gizlilik Politikası</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Supabase</strong></td>
+              <td>Veritabanı, kimlik doğrulama ve veri saklama</td>
+              <td>
+                <a href="https://supabase.com/privacy" target="_blank" style="color: #6366f1"
+                  >supabase.com/privacy</a
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>ExchangeRate API</strong></td>
+              <td>Anlık döviz kuru verisi (anonim istek)</td>
+              <td>
+                <a
+                  href="https://www.exchangerate-api.com/privacy"
+                  target="_blank"
+                  style="color: #6366f1"
+                  >exchangerate-api.com</a
+                >
+              </td>
+            </tr>
+            <tr>
+              <td><strong>Expo / React Native</strong></td>
+              <td>Uygulama çerçevesi (kişisel veri toplamaz)</td>
+              <td>
+                <a href="https://expo.dev/privacy" target="_blank" style="color: #6366f1"
+                  >expo.dev/privacy</a
+                >
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p style="margin-top: 16px">
+          Reklam ağları, analitik platformlar veya sosyal medya SDK'ları
+          <strong>kullanılmamaktadır</strong>.
+        </p>
+      </div>
+
+      <!-- 6. Haklarınız -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background: #10b98120">⚖️</div>
+          <h2>6. Haklarınız</h2>
+        </div>
+        <p>KVKK ve GDPR kapsamında aşağıdaki haklara sahipsiniz:</p>
+        <div class="rights-grid">
+          <div class="right-card">
+            <div class="icon">👁️</div>
+            <h4>Erişim Hakkı</h4>
+            <p>Hangi verilerinizin saklandığını öğrenme hakkı</p>
+          </div>
+          <div class="right-card">
+            <div class="icon">✏️</div>
+            <h4>Düzeltme Hakkı</h4>
+            <p>Yanlış verilerin düzeltilmesini talep etme</p>
+          </div>
+          <div class="right-card">
+            <div class="icon">🗑️</div>
+            <h4>Silme Hakkı</h4>
+            <p>Tüm verilerinizin silinmesini talep etme</p>
+          </div>
+          <div class="right-card">
+            <div class="icon">📦</div>
+            <h4>Taşınabilirlik</h4>
+            <p>Verilerinizi dışa aktarma hakkı</p>
+          </div>
+          <div class="right-card">
+            <div class="icon">🚫</div>
+            <h4>İtiraz Hakkı</h4>
+            <p>Veri işlemeye itiraz etme hakkı</p>
+          </div>
+          <div class="right-card">
+            <div class="icon">❄️</div>
+            <h4>Kısıtlama Hakkı</h4>
+            <p>Veri işlemenin kısıtlanmasını talep etme</p>
+          </div>
+        </div>
+        <p style="margin-top: 16px">
+          Bu haklarınızı kullanmak için aşağıdaki iletişim bilgilerinden bize ulaşabilirsiniz.
+          Taleplerinizi 30 gün içinde yanıtlıyoruz.
+        </p>
+      </div>
+
+      <!-- 7. Veri Saklama -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background: #f59e0b20">🗃️</div>
+          <h2>7. Veri Saklama Süresi</h2>
+        </div>
+        <p>
+          Verileriniz hesabınız aktif olduğu sürece saklanmaktadır. Hesabınızı sildiğinizde tüm
+          kişisel verileriniz 30 gün içinde kalıcı olarak silinmektedir.
+        </p>
+        <p>
+          Döviz kuru verileri uygulamaya anonim olarak çekilmekte ve sunucularımızda
+          saklanmamaktadır.
+        </p>
+      </div>
+
+      <!-- 8. Çocukların Gizliliği -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background: #ec489920">👶</div>
+          <h2>8. Çocukların Gizliliği</h2>
+        </div>
+        <p>
+          Subs uygulaması 13 yaşın altındaki kişilere yönelik değildir. 13 yaşın altındaki birinin
+          verilerini kasıtsız olarak topladığımızı fark edersek bu verileri derhal sileriz.
+        </p>
+        <p>Bu konuda bilginiz varsa lütfen aşağıdaki iletişim bilgilerinden bize ulaşın.</p>
+      </div>
+
+      <!-- 9. Değişiklikler -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon" style="background: #6366f120">🔄</div>
+          <h2>9. Politika Değişiklikleri</h2>
+        </div>
+        <p>
+          Bu gizlilik politikasını zaman zaman güncelleyebiliriz. Önemli değişiklikler olması
+          durumunda uygulama içinden bildirim göndeririz.
+        </p>
+        <p>
+          Güncel politikayı her zaman bu sayfada bulabilirsiniz. Değişiklik tarihini sayfanın üst
+          kısmında belirtmekteyiz.
+        </p>
+      </div>
+
+      <!-- İletişim -->
+      <div class="contact-box">
+        <h3>📬 Bizimle İletişime Geçin</h3>
+        <p>Gizlilik ile ilgili sorularınız veya talepleriniz için bize e-posta gönderin.</p>
+        <a class="contact-btn" href="mailto:subs@gmail.com">✉️ E-posta Gönder</a>
+        <p style="margin-top: 12px; font-size: 12px">subs@gmail.com</p>
+      </div>
+    </div>
+
+    <footer>
+      <p>
+        © 2026 Subs. Tüm hakları saklıdır. &nbsp;·&nbsp;
+        <a href="privacy.html">Gizlilik</a> &nbsp;·&nbsp; <a href="faq.html">SSS</a>
+      </p>
+    </footer>
+  </body>
+</html>
