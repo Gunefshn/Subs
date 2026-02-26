@@ -19,14 +19,25 @@ function RootLayoutNav() {
     }
   }, [session, loading, segments]);
 
-  return (
-    <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
-      <Stack.Screen name="(auth)" options={{ headerShown: false }} />
-      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-      <Stack.Screen name="screens" options={{ headerShown: false }} />
-    </Stack>
-  );
+return (
+  <Stack>
+    <Stack.Screen name="index" options={{ headerShown: false }} />
+    <Stack.Screen name="(auth)" options={{ headerShown: false }} />
+    <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+    <Stack.Screen name="screens" options={{ headerShown: false }} />
+
+    {/* ADD MODAL */}
+<Stack.Screen
+  name="(tabs)/addTransactions"
+  options={{
+    presentation: "transparentModal",
+    animation: "slide_from_bottom",
+    headerShown: false,
+    contentStyle: { backgroundColor: 'transparent' },
+  }}
+/>
+  </Stack>
+);
 }
 
 export default function RootLayout() {
