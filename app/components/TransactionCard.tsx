@@ -1,15 +1,17 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import { Entypo } from '@expo/vector-icons';
+import { View, Text, TouchableOpacity } from 'react-native';
+import { MaterialCommunityIcons, Ionicons } from '@expo/vector-icons';
 import { useTheme } from '@/src/hooks/useTheme';
 
 type Props = {
   name: string;
   icon: string;
+  iconLib?: 'mci' | 'ion' | 'entypo';
   color: string;
   amount: string;
   date: string;
   category: string;
+  onPress?: () => void;
 };
 
 const colorMap: Record<string, string> = {
@@ -39,15 +41,33 @@ const bgColorMapLight: Record<string, string> = {
   gray: '#f3f4f6',
 };
 
-export default function TransactionCard({ name, icon, color, amount, date, category }: Props) {
+export default function TransactionCard({
+  name,
+  icon,
+  iconLib = 'mci',
+  color,
+  amount,
+  date,
+  category,
+  onPress,
+}: Props) {
   const { isDark } = useTheme();
   const iconColor = colorMap[color] ?? '#6b7280';
   const iconBg = isDark
     ? (bgColorMapDark[color] ?? '#37415133')
     : (bgColorMapLight[color] ?? '#f3f4f6');
 
+  const renderIcon = () => {
+    if (iconLib === 'ion') {
+      return <Ionicons name={icon as any} size={22} color={iconColor} />;
+    }
+    return <MaterialCommunityIcons name={icon as any} size={22} color={iconColor} />;
+  };
+
   return (
-    <View
+    <TouchableOpacity
+      onPress={onPress}
+      activeOpacity={onPress ? 0.7 : 1}
       className={`mx-4 mb-3 rounded-2xl p-4 ${isDark ? 'bg-gray-800' : 'bg-white'}`}
       style={{ shadowColor: '#000', shadowOpacity: 0.05, shadowRadius: 6, elevation: 2 }}>
       <View className="flex-row items-center justify-between">
@@ -56,10 +76,12 @@ export default function TransactionCard({ name, icon, color, amount, date, categ
           <View
             className="mr-3 items-center justify-center rounded-full"
             style={{ width: 44, height: 44, backgroundColor: iconBg }}>
-            <Entypo name={icon as any} size={22} color={iconColor} />
+            {renderIcon()}
           </View>
-          <View>
-            <Text className={`text-base font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}>
+          <View className="flex-1">
+            <Text
+              className={`text-base font-semibold ${isDark ? 'text-white' : 'text-gray-900'}`}
+              numberOfLines={1}>
               {name}
             </Text>
             <Text className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
@@ -76,6 +98,6 @@ export default function TransactionCard({ name, icon, color, amount, date, categ
           <Text className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{date}</Text>
         </View>
       </View>
-    </View>
+    </TouchableOpacity>
   );
 }

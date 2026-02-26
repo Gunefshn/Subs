@@ -228,7 +228,7 @@ const AuthScreen = () => {
       </TouchableOpacity>
 
       {/* Google Button */}
-      <TouchableOpacity
+      {/* <TouchableOpacity
         className="mt-3 w-full flex-row items-center justify-center rounded-xl border border-gray-700"
         style={{ height: 52, opacity: loading ? 0.7 : 1 }}
         activeOpacity={0.82}
@@ -236,7 +236,7 @@ const AuthScreen = () => {
         onPress={() => Alert.alert('Yakında', 'Google ile giriş özelliği yakında eklenecek')}>
         <AntDesign name="google" size={20} color="#ea4335" />
         <Text className="ml-2 text-sm font-medium text-gray-300">Google ile devam et</Text>
-      </TouchableOpacity>
+      </TouchableOpacity> */}
     </KeyboardAvoidingView>
   );
 };
