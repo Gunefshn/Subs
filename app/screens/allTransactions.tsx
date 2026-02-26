@@ -107,101 +107,101 @@ export default function AllTransactions() {
 
       {/* Arama — beyaz arka plan */}
       <View
-        className="mx-4 mb-3 flex-row items-center rounded-2xl bg-white px-4"
-        style={{ height: 48 }}>
+        className="mx-4 mt-4 mb-3 flex-row items-center rounded-2xl bg-white px-4 h-12">
         <Ionicons name="search-outline" size={18} color="#9ca3af" />
-        <TextInput
-          className="ml-2 flex-1 text-sm text-gray-800"
-          placeholder="İşlem adı ara..."
-          placeholderTextColor="#9ca3af"
-          value={search}
-          onChangeText={setSearch}
+          <TextInput
+            className="ml-2 flex-1 text-sm text-gray-800"
+            placeholder="İşlem adı ara..."
+            placeholderTextColor="#9ca3af"
+            value={search}
+            onChangeText={setSearch}
         />
-        {search.length > 0 && (
-          <TouchableOpacity onPress={() => setSearch('')}>
-            <Ionicons name="close-circle" size={18} color="#9ca3af" />
-          </TouchableOpacity>
-        )}
+      {search.length > 0 && (
+       <TouchableOpacity onPress={() => setSearch('')}>
+        <Ionicons name="close-circle" size={18} color="#9ca3af" />
+      </TouchableOpacity>
+      )}
       </View>
 
-      {/* Filtre Butonları — ortalı, beyaz bg, koyu text */}
-      <View className="mx-4 mb-4 flex-row justify-center gap-2">
-        {/* Sıralama */}
-        <View>
-          <TouchableOpacity
-            className="flex-row items-center rounded-full bg-white px-4 py-2"
-            onPress={() => {
-              setShowSortMenu(!showSortMenu);
-              setShowCategoryMenu(false);
-            }}>
-            <Text className="mr-1 text-sm font-medium text-gray-900">Sırala: {sortBy}</Text>
-            <Ionicons name="chevron-down" size={14} color="#111827" />
-          </TouchableOpacity>
-          {showSortMenu && (
-            <View
-              className="absolute left-0 top-10 z-50 w-36 rounded-xl bg-white"
-              style={{ elevation: 10, shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 8 }}>
-              {SORT_OPTIONS.map((option) => (
-                <TouchableOpacity
-                  key={option}
-                  className={`px-4 py-3 ${sortBy === option ? 'bg-gray-100' : ''}`}
-                  onPress={() => {
-                    setSortBy(option);
-                    setShowSortMenu(false);
-                  }}>
-                  <Text
-                    className={`text-sm ${sortBy === option ? 'font-semibold text-gray-900' : 'text-gray-500'}`}>
-                    {option}
-                  </Text>
-                </TouchableOpacity>
-              ))}
-            </View>
-          )}
-        </View>
 
-        {/* Kategori */}
-        <View>
+{/* Filtre Butonları */}
+<View className="mx-4 mt-4 mb-4 flex-row gap-2">
+  {/* Sıralama */}
+  <View className="flex-1">
+    <TouchableOpacity
+      className="flex-row items-center justify-center rounded-full bg-white px-4 py-2"
+      onPress={() => {
+        setShowSortMenu(!showSortMenu);
+        setShowCategoryMenu(false);
+      }}>
+      <Text className="mr-1 text-sm font-medium text-gray-900">Sırala: {sortBy}</Text>
+      <Ionicons name="chevron-down" size={14} color="#111827" />
+    </TouchableOpacity>
+    {showSortMenu && (
+      <View
+        className="absolute left-0 top-12 z-50 w-36 rounded-xl bg-white"
+        style={{ elevation: 10, shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 8 }}>
+        {SORT_OPTIONS.map((option) => (
           <TouchableOpacity
-            className="flex-row items-center rounded-full bg-white px-4 py-2"
+            key={option}
+            className={`px-4 py-3 ${sortBy === option ? 'bg-gray-100' : ''}`}
             onPress={() => {
-              setShowCategoryMenu(!showCategoryMenu);
+              setSortBy(option);
               setShowSortMenu(false);
             }}>
-            <Text className="mr-1 text-sm font-medium text-gray-900">
-              {selectedCategory === 'Tümü' ? 'Kategori' : selectedCategory}
+            <Text
+              className={`text-sm ${sortBy === option ? 'font-semibold text-gray-900' : 'text-gray-500'}`}>
+              {option}
             </Text>
-            <Ionicons name="chevron-down" size={14} color="#111827" />
           </TouchableOpacity>
-          {showCategoryMenu && (
-            <View
-              className="absolute left-0 top-10 z-50 w-44 rounded-xl bg-white"
-              style={{ elevation: 10, shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 8 }}>
-              <ScrollView style={{ maxHeight: 240 }} showsVerticalScrollIndicator={false}>
-                {CATEGORIES.map((cat) => (
-                  <TouchableOpacity
-                    key={cat}
-                    className={`px-4 py-3 ${selectedCategory === cat ? 'bg-gray-100' : ''}`}
-                    onPress={() => {
-                      setSelectedCategory(cat);
-                      setShowCategoryMenu(false);
-                    }}>
-                    <Text
-                      className={`text-sm ${selectedCategory === cat ? 'font-semibold text-gray-900' : 'text-gray-500'}`}>
-                      {cat}
-                    </Text>
-                  </TouchableOpacity>
-                ))}
-              </ScrollView>
-            </View>
-          )}
-        </View>
-
-        {/* Tutar Aralığı */}
-        <TouchableOpacity className="flex-row items-center rounded-full bg-white px-4 py-2">
-          <Text className="mr-1 text-sm font-medium text-gray-900">Tutar Aralığı</Text>
-          <Ionicons name="chevron-down" size={14} color="#111827" />
-        </TouchableOpacity>
+        ))}
       </View>
+    )}
+  </View>
+
+  {/* Kategori */}
+  <View className="flex-1">
+    <TouchableOpacity
+      className="flex-row items-center justify-center rounded-full bg-white px-4 py-2"
+      onPress={() => {
+        setShowCategoryMenu(!showCategoryMenu);
+        setShowSortMenu(false);
+      }}>
+      <Text className="mr-1 text-sm font-medium text-gray-900">
+        {selectedCategory === 'Tümü' ? 'Kategori' : selectedCategory}
+      </Text>
+      <Ionicons name="chevron-down" size={14} color="#111827" />
+    </TouchableOpacity>
+    {showCategoryMenu && (
+      <View
+        className="absolute left-0 top-12 z-50 w-44 rounded-xl bg-white"
+        style={{ elevation: 10, shadowColor: '#000', shadowOpacity: 0.2, shadowRadius: 8 }}>
+        <ScrollView style={{ maxHeight: 240 }} showsVerticalScrollIndicator={false}>
+          {CATEGORIES.map((cat) => (
+            <TouchableOpacity
+              key={cat}
+              className={`px-4 py-3 ${selectedCategory === cat ? 'bg-gray-100' : ''}`}
+              onPress={() => {
+                setSelectedCategory(cat);
+                setShowCategoryMenu(false);
+              }}>
+              <Text
+                className={`text-sm ${selectedCategory === cat ? 'font-semibold text-gray-900' : 'text-gray-500'}`}>
+                {cat}
+              </Text>
+            </TouchableOpacity>
+          ))}
+        </ScrollView>
+      </View>
+    )}
+  </View>
+
+  {/* Tutar Aralığı */}
+  <TouchableOpacity className="flex-1 flex-row items-center justify-center rounded-full bg-white px-4 py-2">
+    <Text className="mr-1 text-sm font-medium text-gray-900">Tutar Aralığı</Text>
+    <Ionicons name="chevron-down" size={14} color="#111827" />
+  </TouchableOpacity>
+</View>
       {/* İşlem Listesi */}
       <ScrollView
         className="flex-1 px-4"
