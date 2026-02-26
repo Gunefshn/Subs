@@ -11,6 +11,7 @@ import {
   TextInput,
   KeyboardAvoidingView,
   Platform,
+  Linking,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons, MaterialIcons } from '@expo/vector-icons';
@@ -21,7 +22,6 @@ import { useTheme } from '../../src/hooks/useTheme';
 import { supabase } from '../../src/lib/supabase';
 import { router } from 'expo-router';
 import { Currency } from '../../src/lib/exchange';
-
 export default function ProfileScreen() {
   const { user, signOut } = useAuth();
   const { profile, loading, refetch } = useUser();
@@ -332,7 +332,16 @@ export default function ProfileScreen() {
           <TouchableOpacity
             className="flex-row items-center justify-between px-4 py-4"
             style={{ borderBottomWidth: 1, borderBottomColor: borderColorRaw }}
-            onPress={() => Alert.alert('Yakında', 'Gizlilik sözleşmesi linki eklenecek.')}>
+            onPress={async () => {
+              const url = 'https://gunefshn.github.io/SubsPrivacy/';
+              // Önce URL açılabilir mi kontrol et
+              const supported = await Linking.canOpenURL(url);
+              if (supported) {
+                await Linking.openURL(url);
+              } else {
+                Alert.alert('Hata', 'Link açılamıyor.');
+              }
+            }}>
             <View className="flex-row items-center">
               <View
                 className="mr-3 h-8 w-8 items-center justify-center rounded-full"
@@ -343,10 +352,18 @@ export default function ProfileScreen() {
             </View>
             <Ionicons name="chevron-forward" size={16} color={colors.icon} />
           </TouchableOpacity>
-
           <TouchableOpacity
             className="flex-row items-center justify-between px-4 py-4"
-            onPress={() => Alert.alert('Yakında', 'SSS linki eklenecek.')}>
+            onPress={async () => {
+              const url = 'https://gunefshn.github.io/SubsFaq/';
+              // Önce URL açılabilir mi kontrol et
+              const supported = await Linking.canOpenURL(url);
+              if (supported) {
+                await Linking.openURL(url);
+              } else {
+                Alert.alert('Hata', 'Link açılamıyor.');
+              }
+            }}>
             <View className="flex-row items-center">
               <View
                 className="mr-3 h-8 w-8 items-center justify-center rounded-full"
