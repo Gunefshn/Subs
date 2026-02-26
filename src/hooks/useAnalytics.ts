@@ -14,20 +14,41 @@ type DailyData = {
   total: number;
 };
 
-const CATEGORY_COLORS: Record<string, string> = {
-  'Kira':           '#3B82F6',
-  'Fatura':         '#3B82F6',
-  'Market':         '#22C55E',
-  'Yemek':          '#EAB308',
-  'Eğlence':        '#EAB308',
-  'Dijital Servis': '#EF4444',
-  'Oyun':           '#EF4444',
-  'Spor':           '#F97316',
-  'Sağlık':         '#F97316',
-  'Ulaşım':         '#A855F7',
-  'Diğer':          '#64748B',
+// Gruplama haritası
+const CATEGORY_GROUPS: Record<string, string> = {
+  'Fatura':         'Fatura & Kira',
+  'Kira':           'Fatura & Kira',
+  'Market':         'Alışveriş & Market',
+  'Alışveriş':      'Alışveriş & Market',
+  'Eğlence':        'Eğlence & Yemek',
+  'Yemek':          'Eğlence & Yemek',
+  'Dijital Servis': 'Dijital & Oyun',
+  'Oyun':           'Dijital & Oyun',
+  'Sağlık':         'Sağlık & Spor',
+  'Spor':           'Sağlık & Spor',
+  'Eğitim':         'Eğitim & Ulaşım',
+  'Ulaşım':         'Eğitim & Ulaşım',
 };
 
+const GROUP_COLORS: Record<string, string> = {
+  'Fatura & Kira':       '#3B82F6',
+  'Alışveriş & Market':  '#22C55E',
+  'Eğlence & Yemek':     '#EAB308',
+  'Dijital & Oyun':      '#EF4444',
+  'Sağlık & Spor':       '#F97316',
+  'Eğitim & Ulaşım':     '#A855F7',
+  'Diğer':               '#64748B',
+};
+
+export const GROUP_SHORT_NAMES: Record<string, string> = {
+  'Fatura & Kira':      'Kira & Fatura',
+  'Alışveriş & Market': 'Alış. & Market',
+  'Eğlence & Yemek':    'Eğl. & Yemek',
+  'Dijital & Oyun':     'Dij. & Oyun',
+  'Sağlık & Spor':      'Sağlık & Spor',
+  'Eğitim & Ulaşım':    'Eğit. & Ulaşım',
+  'Diğer':              'Diğer',
+};
 const DAY_NAMES = ['Paz', 'Pzt', 'Sal', 'Çrş', 'Prş', 'Cum', 'Cmt'];
 
 export function useAnalytics(filter: 'Bu Ay' | 'Geçen Ay' | 'Bu Yıl') {
@@ -87,42 +108,57 @@ export function useAnalytics(filter: 'Bu Ay' | 'Geçen Ay' | 'Bu Yıl') {
       return;
     }
 
-    // Gelir / gider toplamları
     const expenses = data.filter(t => t.type === 'expense');
     const incomes = data.filter(t => t.type === 'income');
     const expenseTotal = expenses.reduce((sum, t) => sum + t.amount, 0);
-    const incomeTotal = incomes.reduce((sum, t) => sum + t.amount, 0);
     setTotalExpense(expenseTotal);
-    setTotalIncome(incomeTotal);
+    setTotalIncome(incomes.reduce((sum, t) => sum + t.amount, 0));
 
-    // Kategoriye göre dağılım
-    const categoryMap: Record<string, number> = {};
+    // Gruplandırılmış kategori dağılımı
+    const groupMap: Record<string, number> = {};
     expenses.forEach(t => {
-      categoryMap[t.category] = (categoryMap[t.category] || 0) + t.amount;
+      const group = CATEGORY_GROUPS[t.category] ?? 'Diğer';
+      groupMap[group] = (groupMap[group] || 0) + t.amount;
     });
 
-    const categoryList = Object.entries(categoryMap)
+    const categoryList = Object.entries(groupMap)
       .map(([category, total]) => ({
         category,
         total,
         percentage: expenseTotal > 0 ? Math.round((total / expenseTotal) * 100) : 0,
-        color: CATEGORY_COLORS[category] ?? '#64748B',
+        color: GROUP_COLORS[category] ?? '#64748B',
       }))
       .sort((a, b) => b.total - a.total);
 
     setCategoryData(categoryList);
 
     // Son 7 gün
-    const last7: DailyData[] = [];
-    for (let i = 6; i >= 0; i--) {
-      const d = new Date();
-      d.setDate(d.getDate() - i);
-      const dayStr = d.toISOString().split('T')[0];
-      const dayTotal = expenses
-       .filter(t => new Date(t.date).toISOString().split('T')[0] === dayStr)
-        .reduce((sum, t) => sum + t.amount, 0);
-      last7.push({ day: DAY_NAMES[d.getDay()], total: dayTotal });
-    }
+   // Son 7 gün — bugün dahil, yarın yok
+const last7: DailyData[] = [];
+const today = new Date();
+today.setHours(23, 59, 59, 999); 
+
+for (let i = 6; i >= 0; i--) {
+  const d = new Date();
+  d.setDate(d.getDate() - i);
+  
+  
+  const dayStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+  
+  const dayTotal = expenses
+    .filter(t => {
+      
+      const txDate = new Date(new Date(t.date).getTime() + 3 * 60 * 60 * 1000);
+      const txStr = `${txDate.getUTCFullYear()}-${String(txDate.getUTCMonth() + 1).padStart(2, '0')}-${String(txDate.getUTCDate()).padStart(2, '0')}`;
+      return txStr === dayStr;
+    })
+    .reduce((sum, t) => sum + t.amount, 0);
+
+  last7.push({ day: DAY_NAMES[d.getDay()], total: dayTotal });
+  console.log(`i:${i} | tarih:${dayStr} | getDay:${d.getDay()} | gün:${DAY_NAMES[d.getDay()]} | total:${dayTotal}`);
+}
+console.log('Bugün getDay():', new Date().getDay());
+console.log('last7:', JSON.stringify(last7));
     setDailyData(last7);
 
     setLoading(false);
