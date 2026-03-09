@@ -1,24 +1,63 @@
+
+# ─── Bağımlılıklar ───────────────────────────────
 node_modules/
+.pnp
+.pnp.js
+
+# ─── Expo ────────────────────────────────────────
 .expo/
 dist/
-npm-debug.*
+web-build/
+expo-env.d.ts
+
+# ─── Native Build Çıktıları ───────────────────────
+android/
+ios/
 *.jks
 *.p8
 *.p12
 *.key
 *.mobileprovision
 *.orig.*
-web-build/
-# expo router
-expo-env.d.ts
 
+# ─── Ortam Değişkenleri (GİZLİ) ──────────────────
+.env
+.env.local
+.env.development
+.env.production
+.env*.local
 
+# ─── TypeScript ───────────────────────────────────
+*.tsbuildinfo
 
-ios
-android
+# ─── Log Dosyaları ────────────────────────────────
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+logs/
+*.log
 
-# macOS
+# ─── İşletim Sistemi ─────────────────────────────
 .DS_Store
+.DS_Store?
+._*
+Thumbs.db
+desktop.ini
 
-# Temporary files created by Metro to check the health of the file watcher
+# ─── IDE & Editör ─────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*.swo
+.history/
+
+# ─── Test & Coverage ─────────────────────────────
+coverage/
+.nyc_output/
+
+# ─── Metro Bundler ────────────────────────────────
 .metro-health-check*
+
+# ─── EAS Build ────────────────────────────────────
+.easignore
+eas-build-local-tmp/
