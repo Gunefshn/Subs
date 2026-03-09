@@ -6,7 +6,7 @@
 
 ## 👨‍💻 Ekip
 
-Bu proje, \*\*Siliconmade Academy MF107 Sınıfı Gunef ŞAHİN- Zeynep Ece GÖKÇE - İbrahim Caner COŞKUN öğrencileri tarafından Aşama Bitirme Projesi olarak geliştirilmiştir.
+Bu proje, Siliconmade Academy MF107 Sınıfı Gunef ŞAHİN- Zeynep Ece GÖKÇE - İbrahim Caner COŞKUN öğrencileri tarafından Aşama Bitirme Projesi olarak geliştirilmiştir.
 
 | İsim                 | LinkedIn                                                                                                                  |
 | -------------------- | ------------------------------------------------------------------------------------------------------------------------- |

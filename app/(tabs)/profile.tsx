@@ -156,35 +156,54 @@ export default function ProfileScreen() {
   };
 
   const handleDeleteAccount = () => {
-    Alert.alert(
-      'Hesabı Sil',
-      'Hesabınızı ve tüm verilerinizi kalıcı olarak silmek istediğinize emin misiniz? Bu işlem geri alınamaz.',
-      [
-        { text: 'İptal', style: 'cancel' },
-        {
-          text: 'Evet, Sil',
-          style: 'destructive',
-          onPress: async () => {
-            setDeleting(true);
-            try {
-              if (!user) return;
-              await supabase.from('transactions').delete().eq('user_id', user.id);
-              await supabase.from('subscriptions').delete().eq('user_id', user.id);
-              await supabase.from('profiles').delete().eq('id', user.id);
-              const { error } = await supabase.rpc('delete_user');
-              if (error) throw error;
-              await signOut();
-              router.replace('/(auth)/login');
-            } catch {
-              Alert.alert('Hata', 'Hesap silinirken bir hata oluştu.');
-            } finally {
-              setDeleting(false);
-            }
-          },
+  Alert.alert(
+    'Hesabı Sil',
+    'Hesabınızı silmeden önce neden ayrıldığınızı öğrenmek isteriz. Kısa bir form doldurmadan hesabınızı silemezsiniz.',
+    [
+      { text: 'İptal', style: 'cancel' },
+      {
+        text: 'Formu Doldur',
+        onPress: async () => {
+          // Google Form'u aç
+          await Linking.openURL('https://forms.gle/YDeQ58BPfF5SwgDR6');
+
+          // Kısa bir gecikme sonra ikinci alert
+          setTimeout(() => {
+            Alert.alert(
+              'Formu doldurdunuz mu?',
+              'Formu doldurduğunuzdan emin olun. Hesabınız kalıcı olarak silinecektir.',
+              [
+                { text: 'Hayır, İptal', style: 'cancel' },
+                {
+                  text: 'Evet, Hesabı Sil',
+                  style: 'destructive',
+                  onPress: async () => {
+                    setDeleting(true);
+                    try {
+                      if (!user) return;
+                      await supabase.from('transactions').delete().eq('user_id', user.id);
+                      await supabase.from('subscriptions').delete().eq('user_id', user.id);
+                      await supabase.from('credit_cards').delete().eq('user_id', user.id);
+                      await supabase.from('profiles').delete().eq('id', user.id);
+                      const { error } = await supabase.rpc('delete_user');
+                      if (error) throw error;
+                      await signOut();
+                      router.replace('/(auth)/login');
+                    } catch {
+                      Alert.alert('Hata', 'Hesap silinirken bir hata oluştu.');
+                    } finally {
+                      setDeleting(false);
+                    }
+                  },
+                },
+              ]
+            );
+          }, 1500); // Form açıldıktan 1.5sn sonra ikinci alert
         },
-      ]
-    );
-  };
+      },
+    ]
+  );
+};
 
   if (loading || deleting) {
     return (
